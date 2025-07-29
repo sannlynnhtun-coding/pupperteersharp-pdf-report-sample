@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Invoice #{{Number}}</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .invoice-container {
+            max-width: 800px;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #eee;
+            box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+        }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .invoice-title {
+            font-size: 45px;
+            line-height: 1.2;
+            color: #333;
+            margin: 0;
+        }
+
+        .header-details p {
+            margin: 0;
+        }
+
+        .addresses {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .address-box {
+            width: 48%;
+        }
+
+        .address-title {
+            font-weight: bold;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+
+            .items-table th, .items-table td {
+                border-bottom: 1px solid #eee;
+                padding: 12px;
+                text-align: left;
+            }
+
+            .items-table th {
+                background-color: #f8f8f8;
+                font-weight: bold;
+                border-top: 1px solid #eee;
+            }
+
+            .items-table .align-right {
+                text-align: right;
+            }
+
+        .totals {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .totals-container {
+            width: 50%;
+            min-width: 250px;
+        }
+
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+
+            .totals-row.total {
+                font-weight: bold;
+                font-size: 1.2em;
+                border-top: 2px solid #333;
+                padding-top: 10px;
+            }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <div class="invoice-header">
+            <div class="header-details">
+                <h1 class="invoice-title">INVOICE</h1>
+                <p><strong>Invoice #:</strong> {{Number}}</p>
+                <p><strong>Issued:</strong> {{formatDate IssuedDate}}</p>
+                <p><strong>Due:</strong> {{formatDate DueDate}}</p>
+            </div>
+            <div>
+                {{#if LogoBase64}}<img src="data:image/png;base64,{{LogoBase64}}" alt="Company Logo" style="max-width: 150px;" />{{else}}<div style="width: 150px; height: 75px; background-color: #f2f2f2; display: flex; align-items: center; justify-content: center; color: #ccc;">Logo</div>{{/if}}
+            </div>
+        </div>
+        <div class="addresses">
+            <div class="address-box">
+                <p class="address-title">From:</p>
+                <p><strong>{{SellerAddress.CompanyName}}</strong></p>
+                <p>{{SellerAddress.Street}}</p>
+                <p>{{SellerAddress.City}}, {{SellerAddress.State}}</p>
+                <p>{{SellerAddress.Email}}</p>
+            </div>
+            <div class="address-box">
+                <p class="address-title">To:</p>
+                <p><strong>{{CustomerAddress.CompanyName}}</strong></p>
+                <p>{{CustomerAddress.Street}}</p>
+                <p>{{CustomerAddress.City}}, {{CustomerAddress.State}}</p>
+                <p>{{CustomerAddress.Email}}</p>
+            </div>
+        </div>
+        <table class="items-table">
+            <thead><tr><th>Description</th><th>Qty</th><th class="align-right">Price</th><th class="align-right">Total</th></tr></thead>
+            <tbody>
+                {{#each LineItems}}
+                <tr><td>{{Name}}</td><td>{{Quantity}}</td><td class="align-right">{{formatCurrency Price}}</td><td class="align-right">{{formatCurrency (multiply Price Quantity)}}</td></tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <div class="totals">
+            <div class="totals-container">
+                <div class="totals-row"><span>Subtotal:</span><span class="align-right">{{formatCurrency Subtotal}}</span></div>
+                <div class="totals-row"><span>Tax (0%):</span><span class="align-right">{{formatCurrency 0}}</span></div>
+                <div class="totals-row total"><span>Total:</span><span class="align-right">{{formatCurrency Total}}</span></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

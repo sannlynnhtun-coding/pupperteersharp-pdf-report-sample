@@ -1,0 +1,6 @@
+@PupperteersharpPdfReportSample_HostAddress = http://localhost:5238
+
+GET {{PupperteersharpPdfReportSample_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
